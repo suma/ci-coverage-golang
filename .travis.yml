@@ -11,7 +11,9 @@ before_install:
 
 install:
   - go get -t -d -v ./...
-  - go build -v
 
 script:
   - sh test_cover.sh
+
+after_success:
+  - $HOME/gopath/bin/goveralls -coverprofile=.profile.cov -repotoken $COVERALLS_TOKEN
