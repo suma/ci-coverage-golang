@@ -14,6 +14,8 @@ trap cleanup INT QUIT TERM EXIT
 
 # メインの処理
 prof=${1:-".profile.cov"}
+echo "" > coverage.txt
+codecov="coverage.txt" # for codecov
 echo "mode: count" > $prof
 gopath1=$(echo $GOPATH | cut -d: -f1)
 for pkg in $(go list ./...); do
@@ -21,6 +23,7 @@ for pkg in $(go list ./...); do
   go test -covermode=count -coverprofile=$tmpprof $pkg
   if [ -f $tmpprof ]; then
     cat $tmpprof | tail -n +2 >> $prof
+    cat $tmpprof >> $codecov
     rm $tmpprof
   fi
 done
